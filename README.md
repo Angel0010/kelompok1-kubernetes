@@ -63,7 +63,7 @@ Demonstrasikan self-healing. Lakukan dan dokumentasikan langkah berikut:
 
 Simpan screenshot dan catat waktunya. Insiden 1 tidak akan terjadi lagi karena Kubernetes langsung membuat Pod baru tanpa menunggu ada orang yang datang ke kantor.
 
-## Screenshoot hasil 
+## Screenshoot hasil (nanti benerin lagi yaa, biar dokumentasinya jelas)
 # Hasil tugas 1
 
 Membuat namespace development:
