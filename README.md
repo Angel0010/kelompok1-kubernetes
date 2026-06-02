@@ -174,7 +174,7 @@ Melakukan `kubectl apply -f kubernetes/deployment.yaml -n taskflow-prod` di Term
 
 Berhasil mengupdate versi tanpa adanya downtime (dapat dilihat pada http status code nya).
 
-# Hasil Tugas 4 
+# Hasil Tugas 5 
 Memeriksa riwayat revisi deployment:
 ```
 kubectl rollout history deployment/taskflow-api -n taskflow-prod
@@ -190,7 +190,7 @@ kubectl rollout undo deployment/taskflow-api -n taskflow-prod
 | **Waktu Pemulihan** | Memakan waktu ± 25 Menit. | Super instan, selesai dalam waktu < 1 Detik. |
 | **Tingkat Risiko** | **Tinggi**, karena rentan terjadi kesalahan pengetikan manual manusia (*human error*) saat konfigurasi ulang di server. | **Rendah**, karena otomatis dikelola oleh state internal cluster Kubernetes yang sudah terekam dengan aman. |
 
-# Hasil Tugas 5
+# Hasil Tugas 6
 Mendeploy aplikasi ke namespace `taskflow-dev`:
 ```
 kubectl apply -f kubernetes/deployment.yaml -n taskflow-dev
