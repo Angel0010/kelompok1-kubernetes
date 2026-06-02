@@ -13,7 +13,7 @@ Berikut adalah visualisasi alur kerja otomatis dari saat developer melakukan pus
 graph TD
     A[Developer Push Kode ke Main] -->|Trigger| B[GitHub Actions Runner]
     
-    subgraph CI Job (build)
+    subgraph ci_job ["CI Job (build)"]
         B --> C[Checkout Code]
         C --> D[Setup Go & Run dependencies]
         D --> E[Lari Linting: go vet]
@@ -25,7 +25,7 @@ graph TD
     
     I -->|needs: build| J[CD Job (deploy)]
     
-    subgraph CD Job (deploy)
+    subgraph cd_job ["CD Job (deploy)"]
         J --> K[Setup Kubectl]
         K --> L[Decode KUBECONFIG_BASE64 ke ~/.kube/config]
         L --> M[Jalankan: kubectl set image deployment/taskflow-api]
@@ -34,8 +34,8 @@ graph TD
     
     N --> O[Aplikasi Terupdate di Cluster Kubernetes! (Zero-Downtime)]
     
-    style CI Job fill:#e1f5fe,stroke:#039be5,stroke-width:2px;
-    style CD Job fill:#e8f5e9,stroke:#43a047,stroke-width:2px;
+    style ci_job fill:#e1f5fe,stroke:#039be5,stroke-width:2px;
+    style cd_job fill:#e8f5e9,stroke:#43a047,stroke-width:2px;
     style A fill:#fff9c4,stroke:#fbc02d,stroke-width:2px;
     style O fill:#ffe0b2,stroke:#f57c00,stroke-width:2px;
 ```
@@ -85,9 +85,6 @@ Untuk mengizinkan GitHub Actions berkomunikasi dengan klaster Kubernetes lokal (
 ---
 
 ## 3. Hasil Pengujian Pipeline (Screenshot)
-
-> [!TIP]
-> *Silakan masukkan tangkapan layar (screenshot) hasil eksekusi pipeline Anda pada bagian di bawah ini setelah pipeline berhasil dijalankan di GitHub Actions Anda.*
 
 ### A. Screenshot Pipeline GitHub Actions (CI/CD Pipeline)
 Berikut adalah tangkapan layar status pipeline GitHub Actions yang memproses seluruh rangkaian `build` (CI) dan `deploy` (CD):
