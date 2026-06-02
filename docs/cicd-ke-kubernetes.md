@@ -89,17 +89,15 @@ Untuk mengizinkan GitHub Actions berkomunikasi dengan klaster Kubernetes lokal (
 > [!TIP]
 > *Silakan masukkan tangkapan layar (screenshot) hasil eksekusi pipeline Anda pada bagian di bawah ini setelah pipeline berhasil dijalankan di GitHub Actions Anda.*
 
-### A. Screenshot Pipeline GitHub Actions yang Berhasil
+### A. Screenshot Pipeline GitHub Actions (CI/CD Pipeline)
+Berikut adalah tangkapan layar status pipeline GitHub Actions yang memproses seluruh rangkaian `build` (CI) dan `deploy` (CD):
 
-Berikut adalah tangkapan layar status pipeline GitHub Actions yang sukses menjalankan seluruh rangkaian `build` (CI) dan `deploy` (CD):
+![Pipeline Actions](../Pipeline.png)
 
-`<!-- MASUKKAN SCREENSHOT PIPELINE DI SINI, CONTOH: ![GitHub Actions Success](./images/github-actions-success.png) -->`
+### B. Screenshot Setup Kubeconfig di GitHub Secrets
+Berikut adalah konfigurasi kredensial `KUBECONFIG_BASE64` yang berhasil didaftarkan secara aman di dalam repositori:
 
-### B. Screenshot Hasil `kubectl get pods` dengan Image Baru
-
-Berikut adalah hasil perintah `kubectl get pods -n taskflow-prod -o wide` yang memperlihatkan bahwa Pod lama telah sepenuhnya digantikan oleh Pod baru yang berjalan di atas image aplikasi Go dengan tag commit SHA yang baru:
-
-`<!-- MASUKKAN SCREENSHOT KUBECTL GET PODS DI SINI, CONTOH: ![Kubectl Pods Success](./images/kubectl-get-pods.png) -->`
+![Kubeconfig Secret](../Base64.png)
 
 ---
 

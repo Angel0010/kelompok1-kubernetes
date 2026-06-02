@@ -236,12 +236,8 @@ Seluruh rincian arsitektur, panduan konfigurasi, diagram alur, serta jawaban dar
 
 ### Screenshot Hasil Pipeline & Pods:
 
-#### 1. Screenshot Pipeline GitHub Actions (Queued / Sukses)
-*(Silakan simpan screenshot Anda di folder `docs/images/pipeline-status.png` atau ganti URL di bawah ini)*
-![Pipeline Status](./docs/images/pipeline-status.png)
+#### 1. Setup GitHub Secrets (KUBECONFIG_BASE64)
+![Kubeconfig Secret](./Base64.png)
 
-#### 2. Screenshot Kubectl Get Pods (Image Baru Terdeploy)
-*(Silakan simpan screenshot terminal get pods Anda di folder `docs/images/kubectl-pods.png` atau ganti URL di bawah ini)*
-![Kubectl Pods](./docs/images/kubectl-pods.png)
-
-
+#### 2. Pipeline GitHub Actions (CI/CD Pipeline)
+![Pipeline Actions](./Pipeline.png)
