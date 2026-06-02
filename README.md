@@ -6,6 +6,7 @@
 | 2 | Muhammad Rifqi Oktaviansyah | 5027221067 |
 | 3 | Muhammad Arsy Athallah | 5027221048 |
 | 4 | Hafiz Akmaldi Santosa | 5027221061 |
+| 5 | Ditya wahyu Ramadhan| 5027221051 |
 
 
 
