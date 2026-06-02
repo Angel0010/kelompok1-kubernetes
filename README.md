@@ -4,7 +4,8 @@
 |----|------|------|
 | 1 | Angella Christie | 5027221047 |
 | 2 | Muhammad Rifqi Oktaviansyah | 5027221067 |
-| 2 | Muhammad Arsy Athallah | 5027221048 |
+| 3 | Muhammad Arsy Athallah | 5027221048 |
+| 4 | Hafiz Akmaldi Santosa | 5027221061 |
 
 
 
