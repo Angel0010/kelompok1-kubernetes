@@ -1,4 +1,4 @@
-## Anggota Kelompok 1 DevOps
+﻿## Anggota Kelompok 1 DevOps
 
 | No | Nama | NRP |
 |----|------|------|
@@ -225,12 +225,25 @@ Tugas 7 adalah **Integrasi CI/CD Pipeline ke Kubernetes** menggunakan GitHub Act
 
 Seluruh rincian arsitektur, panduan konfigurasi, diagram alur, serta jawaban dari pertanyaan evaluasi telah didokumentasikan secara lengkap pada file:
 👉 **[docs/cicd-ke-kubernetes.md](docs/cicd-ke-kubernetes.md)**
-
 ### Langkah Singkat Penggunaan Pipeline:
 1. **Daftarkan Secret**: Buat repository secret di GitHub dengan nama `KUBECONFIG_BASE64` berisi kubeconfig klaster Minikube Anda yang telah di-encode ke base64.
 2. **Push Kode**: Lakukan push atau merge Pull Request ke branch `main`.
 3. **Pantau Pipeline**: Lihat status build dan deploy secara visual pada tab **Actions** di repositori GitHub Anda.
 4. **Verifikasi**: Kubernetes akan melakukan update tanpa downtime, menggantikan Pod lama dengan Pod baru yang berjalan di atas image commit SHA.
+
+### Script Automasi Local Deployment (`deploy.sh`)
+Untuk mempermudah pengujian local deployment tanpa pipeline CI/CD, kami juga menyediakan script automasi **`deploy.sh`** di root folder. 
+
+Cara menggunakannya:
+1. Berikan hak akses eksekusi script:
+   ```bash
+   chmod +x deploy.sh
+   ```
+2. Jalankan script:
+   ```bash
+   ./deploy.sh
+   ```
+Script ini akan otomatis memastikan namespace `taskflow-dev` dan `taskflow-prod` terbuat, mendeploy manifests ke klaster Anda, serta menampilkan status resource di kedua namespace secara real-time.
 
 ---
 
