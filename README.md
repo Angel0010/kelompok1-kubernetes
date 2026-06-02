@@ -3,6 +3,7 @@
 | No | Nama | NRP |
 |----|------|------|
 | 1 | Angella Christie | 5027221047 |
+| 2 | Muhammad Rifqi Oktaviansyah | 5027221067 |
 
 
 
@@ -141,3 +142,34 @@ kubectl delete pod <nama-pod> -n taskflow-prod
 <img width="2732" height="885" alt="image" src="https://github.com/user-attachments/assets/038d4881-b882-437c-a916-69964c597727" />
 
 Pod dihapus dan Kubernetes berhasil membuat Pod baru dengan status Running dalam waktu sekitar 7 detik.
+
+# Hasil Tugas 4 
+
+Menjalankan script loop request di Terminal 1 yang mengarah ke URL `http://127.0.0.1:56102`:
+```
+while ($true) {
+    $timestamp = Get-Date -Format "HH:mm:ss"
+    try {
+        # Menggunakan URL yang kamu dapatkan dari minikube tadi
+        $resp = Invoke-WebRequest -Uri "http://127.0.0.1:56102" -UseBasicParsing -TimeoutSec 2
+        Write-Host "$timestamp — HTTP $($resp.StatusCode) — $($resp.Content.Trim())" -ForegroundColor Green
+    } catch {
+        Write-Host "$timestamp — HTTP Error atau Down!" -ForegroundColor Red
+    }
+    Start-Sleep -Seconds 0.5
+}
+```
+
+Mengubah argumen teks `deployment.yaml` menjadi versi 2:
+```
+# kubernetes/deployment.yaml (Edit di bagian args)
+          args:
+            - "-text=Halo dari TaskFlow Production v2! Fitur Baru Berhasil Deploy!"
+            - "-listen=:8080"
+```
+
+Melakukan `kubectl apply -f kubernetes/deployment.yaml -n taskflow-prod` di Terminal 2
+
+<img width="1919" height="1052" alt="image" src="https://github.com/user-attachments/assets/66fa4da5-4b07-4aa1-86b0-58a17d5d9d83" />
+
+Berhasil mengupdate versi tanpa adanya downtime (dapat dilihat pada http status code nya).
