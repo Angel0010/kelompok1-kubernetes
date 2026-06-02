@@ -173,3 +173,47 @@ Melakukan `kubectl apply -f kubernetes/deployment.yaml -n taskflow-prod` di Term
 <img width="1919" height="1052" alt="image" src="https://github.com/user-attachments/assets/66fa4da5-4b07-4aa1-86b0-58a17d5d9d83" />
 
 Berhasil mengupdate versi tanpa adanya downtime (dapat dilihat pada http status code nya).
+
+# Hasil Tugas 4 
+Memeriksa riwayat revisi deployment:
+```
+kubectl rollout history deployment/taskflow-api -n taskflow-prod
+```
+
+Melakukan rollback otomatis:
+```
+kubectl rollout undo deployment/taskflow-api -n taskflow-prod
+```
+| Parameter | Manajemen Tradisional (Cara Lama) | Dengan Manajemen Kubernetes |
+| :--- | :--- | :--- |
+| **Langkah Kerja** | Harus SSH ke server -> stop container -> manual pull image lama -> run ulang dengan parameter konfigurasi manual. | Cukup menjalankan satu baris perintah pemulihan (`kubectl rollout undo`). |
+| **Waktu Pemulihan** | Memakan waktu ± 25 Menit. | Super instan, selesai dalam waktu < 1 Detik. |
+| **Tingkat Risiko** | **Tinggi**, karena rentan terjadi kesalahan pengetikan manual manusia (*human error*) saat konfigurasi ulang di server. | **Rendah**, karena otomatis dikelola oleh state internal cluster Kubernetes yang sudah terekam dengan aman. |
+
+# Hasil Tugas 5
+Mendeploy aplikasi ke namespace `taskflow-dev`:
+```
+kubectl apply -f kubernetes/deployment.yaml -n taskflow-dev
+```
+
+Menghapus seluruh pod yang ada di namespace `dev`:
+```
+kubectl delete pods --all -n taskflow-dev
+```
+
+Memeriksa status pod di prod:
+```
+kubectl get pods -n taskflow-prod
+```
+Akses URL aplikasi prod:
+```
+(Invoke-WebRequest -Uri "http://127.0.0.1:40908" -UseBasicParsing).Content.Trim()
+```
+Output aplikasi 
+`
+Halo dari TaskFlow Production!
+`
+
+<img width="1917" height="1071" alt="image" src="https://github.com/user-attachments/assets/1f81282f-f766-4505-b33d-b74587ac64da" />
+
+Meskipun seluruh Pod di namespace `taskflow-dev` telah dihapus, seluruh Pod di namespace `taskflow-prod` terpantau tetap berjalan (Running) dengan aman, dan aplikasi tetap dapat diakses oleh pengguna tanpa gangguan.
