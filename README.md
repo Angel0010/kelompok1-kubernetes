@@ -4,6 +4,7 @@
 |----|------|------|
 | 1 | Angella Christie | 5027221047 |
 | 2 | Muhammad Rifqi Oktaviansyah | 5027221067 |
+| 2 | Muhammad Arsy Athallah | 5027221048 |
 
 
 
@@ -217,3 +218,17 @@ Halo dari TaskFlow Production!
 <img width="1917" height="1071" alt="image" src="https://github.com/user-attachments/assets/1f81282f-f766-4505-b33d-b74587ac64da" />
 
 Meskipun seluruh Pod di namespace `taskflow-dev` telah dihapus, seluruh Pod di namespace `taskflow-prod` terpantau tetap berjalan (Running) dengan aman, dan aplikasi tetap dapat diakses oleh pengguna tanpa gangguan.
+
+# Hasil Tugas 7
+
+Tugas 7 adalah **Integrasi CI/CD Pipeline ke Kubernetes** menggunakan GitHub Actions. Pipeline ini otomatis mendeteksi setiap push ke branch `main`, menjalankan unit dan integration testing, memastikan coverage gate minimal 75%, membangun Docker image dengan tag commit SHA, meng-push ke GitHub Container Registry (GHCR), dan melakukan deployment otomatis (*rolling update*) di klaster production menggunakan `KUBECONFIG_BASE64` yang disimpan secara terenkripsi sebagai GitHub Secret.
+
+Seluruh rincian arsitektur, panduan konfigurasi, diagram alur, serta jawaban dari pertanyaan evaluasi telah didokumentasikan secara lengkap pada file:
+👉 **[docs/cicd-ke-kubernetes.md](docs/cicd-ke-kubernetes.md)**
+
+### Langkah Singkat Penggunaan Pipeline:
+1. **Daftarkan Secret**: Buat repository secret di GitHub dengan nama `KUBECONFIG_BASE64` berisi kubeconfig klaster Minikube Anda yang telah di-encode ke base64.
+2. **Push Kode**: Lakukan push atau merge Pull Request ke branch `main`.
+3. **Pantau Pipeline**: Lihat status build dan deploy secara visual pada tab **Actions** di repositori GitHub Anda.
+4. **Verifikasi**: Kubernetes akan melakukan update tanpa downtime, menggantikan Pod lama dengan Pod baru yang berjalan di atas image commit SHA.
+

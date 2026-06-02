@@ -1,0 +1,138 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    name: Build and Test (CI)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: taskflow
+          POSTGRES_PASSWORD: taskflow_secret
+          POSTGRES_DB: taskflow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22' # standard stable version or use the latest
+          cache: true
+
+      - name: Verify Dependencies
+        run: go mod download
+
+      - name: Run Vet
+        run: make vet
+
+      - name: Run Unit Tests with Race Detector
+        run: make test-race
+
+      - name: Run Integration Tests
+        env:
+          DATABASE_URL: postgres://taskflow:taskflow_secret@localhost:5432/taskflow?sslmode=disable
+        run: make test-integration
+
+      - name: Run Coverage & Check Coverage Gate
+        run: |
+          go test -coverprofile=coverage.out -covermode=atomic ./internal/handler/... ./internal/service/... || true
+          go tool cover -func=coverage.out
+          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
+          echo "Total Coverage: ${COVERAGE}%"
+          if [ -z "$COVERAGE" ]; then
+            echo "❌ Coverage tidak terbaca"
+            exit 1
+          fi
+          awk "BEGIN {exit !($COVERAGE >= 75.0)}" || {
+            echo "❌ Coverage < 75%"
+            exit 1
+          }
+
+      - name: Log in to GitHub Container Registry (GHCR)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Docker Image
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/kelompok1-kubernetes:sha-${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/kelompok1-kubernetes:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Kubernetes (CD)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configure Kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 --decode > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Deploy / Update Image on Kubernetes
+        run: |
+          # Dapatkan nama repo dalam lowercase untuk format image di GHCR
+          REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE_NAME="ghcr.io/${REPO_OWNER}/kelompok1-kubernetes"
+          IMAGE_TAG="sha-${{ github.sha }}"
+          
+          echo "🚀 Melakukan deploy/rolling-update ke namespace taskflow-prod..."
+          echo "Image: ${IMAGE_NAME}:${IMAGE_TAG}"
+          
+          # Set image di deployment taskflow-api pada container taskflow-api
+          kubectl set image deployment/taskflow-api taskflow-api=${IMAGE_NAME}:${IMAGE_TAG} -n taskflow-prod
+
+      - name: Monitor Rollout Status
+        run: |
+          echo "⏳ Menunggu status rollout selesai..."
+          kubectl rollout status deployment/taskflow-api -n taskflow-prod
+          
+          echo "✅ Rollout selesai dengan sukses!"
+          kubectl get pods -n taskflow-prod -o wide

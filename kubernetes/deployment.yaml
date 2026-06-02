@@ -19,9 +19,10 @@ spec:
     spec:
       containers:
         - name: taskflow-api
-          image: hashicorp/http-echo:latest
-          args:
-            - "-text=Halo dari TaskFlow Production!"
-            - "-listen=:8080"
+          image: ghcr.io/angel0010/kelompok1-kubernetes:latest
+          imagePullPolicy: Always
+          env:
+            - name: PORT
+              value: "8080"
           ports:
             - containerPort: 8080
