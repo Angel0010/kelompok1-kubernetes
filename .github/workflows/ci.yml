@@ -39,7 +39,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22' # standard stable version or use the latest
+          go-version: '1.25'
           cache: true
 
       - name: Verify Dependencies
@@ -57,8 +57,10 @@ jobs:
         run: make test-integration
 
       - name: Run Coverage & Check Coverage Gate
+        env:
+          DATABASE_URL: postgres://taskflow:taskflow_secret@localhost:5432/taskflow?sslmode=disable
         run: |
-          go test -coverprofile=coverage.out -covermode=atomic ./internal/handler/... ./internal/service/... || true
+          go test -coverprofile=coverage.out -covermode=atomic ./internal/handler/... ./internal/service/... ./internal/validator/...
           go tool cover -func=coverage.out
           COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
           echo "Total Coverage: ${COVERAGE}%"
