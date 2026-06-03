@@ -23,7 +23,7 @@ spec:
       containers:
         - name: taskflow-api
           image: ghcr.io/angel0010/kelompok1-kubernetes:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: PORT
               value: "8080"
