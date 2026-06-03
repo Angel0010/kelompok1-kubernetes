@@ -89,7 +89,7 @@ Untuk mengizinkan GitHub Actions berkomunikasi dengan klaster Kubernetes lokal (
 ### A. Screenshot Pipeline GitHub Actions (CI/CD Pipeline)
 Berikut adalah tangkapan layar status pipeline GitHub Actions yang memproses seluruh rangkaian `build` (CI) dan `deploy` (CD):
 
-![Pipeline Actions](../Pipeline.png)
+![Pipeline Actions](../Pipeline%20Hijau.png)
 
 ### B. Screenshot Setup Kubeconfig di GitHub Secrets
 Berikut adalah konfigurasi kredensial `KUBECONFIG_BASE64` yang berhasil didaftarkan secara aman di dalam repositori:

@@ -1,4 +1,4 @@
-﻿## Anggota Kelompok 1 DevOps
+## Anggota Kelompok 1 DevOps
 
 | No | Nama | NRP |
 |----|------|------|
@@ -256,4 +256,4 @@ Script ini akan otomatis memastikan namespace `taskflow-dev` dan `taskflow-prod`
 ![Kubeconfig Secret](./Base64.png)
 
 #### 2. Pipeline GitHub Actions (CI/CD Pipeline)
-![Pipeline Actions](./Pipeline.png)
+![Pipeline Actions](./Pipeline%20Hijau.png)
