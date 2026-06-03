@@ -9,66 +9,7 @@
 | 5 | Ditya wahyu Ramadhan| 5027221051 |
 | 6 | Salomo | 5027221063 |
 
-
-
-## Konteks
-TaskFlow Inc. masih menjalankan semua container secara manual di satu server. CTO menceritakan tiga insiden yang terjadi bulan lalu:
-
-Insiden 1 — Container crash jam 02.15 malam. Tidak ada yang tahu sampai klien komplain jam 08.30 pagi. Downtime 6 jam lebih.
-
-Insiden 2 — Saat deploy fitur baru, aplikasi mati 8 menit. Terjadi pas jam sibuk. Klien tidak senang.
-
-Insiden 3 — Versi baru punya bug kritis. Rollback manual memakan 25 menit: SSH ke server, stop container, pull image lama, jalankan ulang.
-
-Tugas kelompok kalian: pindahkan TaskFlow ke Kubernetes dan buktikan bahwa ketiga insiden itu tidak akan terjadi lagi.
-
-## Tugas 1 — Siapkan Namespace
-
-Buat dua namespace untuk memisahkan environment:
-
-```bash
-kubectl create namespace taskflow-dev
-kubectl create namespace taskflow-prod
-```
-
-Simpan juga sebagai file YAML agar bisa dibuat ulang dari Git:
-
-```bash
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: taskflow-dev
-```
-
-## Tugas 2 — Deploy ke Production
-
-Buat `deployment.yaml` dengan ketentuan:
-
-- `replicas: 2` di namespace `prod`
-- Rolling update strategy dengan `maxUnavailable: 0`
-- Gunakan image dari hasil CI/CD pipeline modul 9, atau gunakan hashicorp/http-echo sebagai placeholder
-- Buat `service.yaml` dengan tipe NodePort.
-
-Deploy ke namespace prod:
-```bash
-kubectl apply -f deployment.yaml -n taskflow-prod
-kubectl apply -f service.yaml -n taskflow-prod
-
-# Verifikasi semua berjalan
-kubectl get all -n taskflow-prod
-```
-
-## Tugas 3 — Jawaban untuk Insiden 1 (Self-Healing)
-Demonstrasikan self-healing. Lakukan dan dokumentasikan langkah berikut:
-
-1. Buka dua terminal
-2. Terminal 1: `kubectl get pods -n taskflow-prod -w`
-3. Terminal 2: hapus salah satu Pod
-4. Ukur waktu dari Pod dihapus hingga Pod baru `Running`
-
-Simpan screenshot dan catat waktunya. Insiden 1 tidak akan terjadi lagi karena Kubernetes langsung membuat Pod baru tanpa menunggu ada orang yang datang ke kantor.
-
-## Screenshoot hasil (nanti benerin lagi yaa, biar dokumentasinya jelas)
+## Screenshoot hasil 
 # Hasil tugas 1
 
 Membuat namespace development:
