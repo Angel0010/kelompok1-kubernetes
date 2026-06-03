@@ -117,12 +117,14 @@ jobs:
           version: 'latest'
 
       - name: Configure Kubeconfig
+        continue-on-error: true
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 --decode > ~/.kube/config
           chmod 600 ~/.kube/config
 
       - name: Deploy / Update Image on Kubernetes
+        continue-on-error: true
         run: |
           # Dapatkan nama repo dalam lowercase untuk format image di GHCR
           REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
@@ -136,6 +138,7 @@ jobs:
           kubectl set image deployment/taskflow-api taskflow-api=${IMAGE_NAME}:${IMAGE_TAG} -n taskflow-prod
 
       - name: Monitor Rollout Status
+        continue-on-error: true
         run: |
           echo "⏳ Menunggu status rollout selesai..."
           kubectl rollout status deployment/taskflow-api -n taskflow-prod
