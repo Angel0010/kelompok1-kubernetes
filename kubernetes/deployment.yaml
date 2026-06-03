@@ -18,6 +18,8 @@ spec:
       labels:
         app: taskflow-api
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: taskflow-api
           image: ghcr.io/angel0010/kelompok1-kubernetes:latest

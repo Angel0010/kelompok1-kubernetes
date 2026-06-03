@@ -73,6 +73,10 @@ jobs:
             exit 1
           }
 
+      - name: Set lowercase image name
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: echo "REPO_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Log in to GitHub Container Registry (GHCR)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: docker/login-action@v3
@@ -92,8 +96,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/kelompok1-kubernetes:sha-${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/kelompok1-kubernetes:latest
+            ghcr.io/${{ env.REPO_OWNER }}/kelompok1-kubernetes:sha-${{ github.sha }}
+            ghcr.io/${{ env.REPO_OWNER }}/kelompok1-kubernetes:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
