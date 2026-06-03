@@ -3,6 +3,7 @@ package service
 
 import (
 	"fmt"
+	"sync/atomic"
 	"time"
 
 	"github.com/taskflow/api/internal/model"
@@ -181,10 +182,11 @@ func CalculateCompletionRate(tasks []model.Task) float64 {
 	//return float64(completed / len(tasks) * 100) // BUG
 }
 
-// generateID
+// generateID menghasilkan ID unik menggunakan timestamp + atomic counter.
+// Thread-safe: aman digunakan di bawah concurrent HTTP requests.
 var counter int64
 
 func generateID() string {
-	counter++
-	return fmt.Sprintf("%d-%d", time.Now().UnixNano(), counter)
+	n := atomic.AddInt64(&counter, 1)
+	return fmt.Sprintf("%d-%d", time.Now().UnixNano(), n)
 }
